@@ -1,18 +1,23 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import profilePhoto from '../images/profile.jpg';
 ---
+<Layout title="Jaewon Hur">
+	<Image src={profilePhoto} alt="Jaewon Hur" width={280} height={350} densities={[1, 2, 3]} class="profile-photo" />
+	<h1>Jaewon Hur</h1>
+	<p>
+		I am a new college grad from Univeristy of California, Berkeley majoring Electrical Engineering & Computer Science (EECS).
+		I'm interested in building hardware, VLSI design, and computer architecture.
+	</p>
+</Layout>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Jaewon Hur</title>
-	</head>
-	<body>
-		<h1>Jaewon Hur</h1>
-		<p>Welcome to my personal site.</p>
-	</body>
-</html>
+<style>
+	.profile-photo {
+		display: block;
+		width: 280px;
+		height: 350px;
+		object-fit: cover;
+		padding: 4px;
+	}
+</style>
