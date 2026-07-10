@@ -15,6 +15,6 @@ This project pins Node with `.nvmrc` (Astro 7 requires Node >=22.12). If you use
 
 ## Contacts
 
-- Email: jwhur38@berkeley.edu
-- LinkedIn: [linkedin/Jaewon-Hur](https://www.linkedin.com/in/hurjaewon/)
-- Instagram: @jaewonhurr
+- Email: jwhur38@gmail.com
+- LinkedIn: [linkedin.com/in/hurjaewon](https://www.linkedin.com/in/hurjaewon/)
+- Github: [github.com/jwnhur](https://github.com/jwnhur)

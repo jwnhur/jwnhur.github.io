@@ -1,14 +1,204 @@
 ---
+const navLinks = [
+	{ href: '/', label: 'About' },
+	{ href: '/blog', label: 'Blog' },
+	{ href: '/projects', label: 'Projects' },
+	{ href: '/research', label: 'Research' },
+	{ href: '/academics', label: 'Academics' },
+];
 ---
-<nav>
-	<a href="/">Jaewon Hur</a>
-</nav>
+<header>
+	<nav>
+		<ul class="nav-links">
+			{navLinks.map((link) => (
+				<li><a href={link.href}>{link.label}</a></li>
+			))}
+			<li><a href="/cv.pdf" target="_blank" rel="noopener">CV</a></li>
+		</ul>
+		<div class="nav-actions">
+			<button id="search-toggle" class="icon-button" type="button" aria-label="Search" aria-haspopup="dialog">
+				<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+					<circle cx="11" cy="11" r="7" />
+					<line x1="21" y1="21" x2="16.65" y2="16.65" />
+				</svg>
+			</button>
+			<button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle dark mode">
+				<svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+					<circle cx="12" cy="12" r="4" />
+					<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+				</svg>
+				<svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+				</svg>
+			</button>
+		</div>
+	</nav>
+</header>
+
+<dialog id="search-dialog" aria-label="Search">
+	<div class="search-dialog-header">
+		<span>Search</span>
+		<button id="search-close" class="icon-button" type="button" aria-label="Close search">&times;</button>
+	</div>
+	<div id="search"></div>
+	<p id="search-fallback" hidden>Search index not available. Run <code>npm run build</code> to enable search.</p>
+</dialog>
 
 <style>
+	header {
+		background-color: var(--color-divider);
+	}
+
 	nav {
 		max-width: 720px;
 		margin: 0 auto;
-		padding: 1.5rem 1.5rem 0;
+		padding: 1.5rem 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 1.25rem;
+		flex-wrap: wrap;
+	}
+
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		flex-wrap: wrap;
+	}
+
+	.nav-links a {
+		color: #ffffff;
 		font-weight: 600;
 	}
+
+	.nav-links a:hover {
+		color: #b7e4c7;
+	}
+
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.icon-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		padding: 0;
+		border: none;
+		background: none;
+		color: #ffffff;
+		cursor: pointer;
+		border-radius: 0.375rem;
+	}
+
+	.icon-button:hover {
+		color: #b7e4c7;
+	}
+
+	.icon-moon {
+		display: none;
+	}
+
+	:root[data-theme='dark'] .icon-sun {
+		display: none;
+	}
+
+	:root[data-theme='dark'] .icon-moon {
+		display: block;
+	}
+
+	#search-dialog {
+		width: min(560px, 90vw);
+		border: none;
+		border-radius: 0.5rem;
+		padding: 1rem;
+		color: var(--color-text);
+		background-color: var(--color-bg);
+	}
+
+	#search-dialog::backdrop {
+		background: rgb(0 0 0 / 40%);
+	}
+
+	.search-dialog-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 0.75rem;
+		font-weight: 600;
+	}
+
+	#search-fallback {
+		font-size: 0.9rem;
+		opacity: 0.8;
+	}
 </style>
+
+<script>
+	const THEME_KEY = 'theme';
+	const themeToggle = document.getElementById('theme-toggle');
+
+	themeToggle?.addEventListener('click', () => {
+		const isDark = document.documentElement.dataset.theme === 'dark';
+		const next = isDark ? 'light' : 'dark';
+		if (next === 'dark') {
+			document.documentElement.dataset.theme = 'dark';
+		} else {
+			delete document.documentElement.dataset.theme;
+		}
+		localStorage.setItem(THEME_KEY, next);
+	});
+
+	const searchToggle = document.getElementById('search-toggle');
+	const searchClose = document.getElementById('search-close');
+	const searchDialog = document.getElementById('search-dialog') as HTMLDialogElement | null;
+	const searchFallback = document.getElementById('search-fallback');
+	let pagefindLoading: Promise<void> | null = null;
+
+	function loadPagefindUI() {
+		if (!pagefindLoading) {
+			pagefindLoading = (async () => {
+				const link = document.createElement('link');
+				link.rel = 'stylesheet';
+				link.href = '/pagefind/pagefind-ui.css';
+				document.head.appendChild(link);
+
+				await new Promise<void>((resolve, reject) => {
+					const script = document.createElement('script');
+					script.src = '/pagefind/pagefind-ui.js';
+					script.onload = () => resolve();
+					script.onerror = () => reject(new Error('Failed to load Pagefind'));
+					document.head.appendChild(script);
+				});
+
+				// @ts-expect-error PagefindUI is loaded globally by the script above
+				new PagefindUI({ element: '#search', showSubResults: true });
+			})().catch(() => {
+				searchFallback?.removeAttribute('hidden');
+			});
+		}
+		return pagefindLoading;
+	}
+
+	searchToggle?.addEventListener('click', async () => {
+		searchDialog?.showModal();
+		await loadPagefindUI();
+		searchDialog?.querySelector('input')?.focus();
+	});
+
+	searchClose?.addEventListener('click', () => searchDialog?.close());
+
+	searchDialog?.addEventListener('click', (event) => {
+		if (event.target === searchDialog) {
+			searchDialog.close();
+		}
+	});
+</script>

@@ -3,6 +3,14 @@
 	--color-bg: #ffffff;
 	--color-accent: #0057a8;
 	--color-accent-hover: #8e018e;
+	--color-divider: #00553a;
+}
+
+:root[data-theme='dark'] {
+	--color-text: #e4e4e9;
+	--color-bg: #1b1b1f;
+	--color-accent: #6cb2ff;
+	--color-accent-hover: #e388e3;
 }
 
 * {
@@ -15,6 +23,7 @@ body {
 	line-height: 1.6;
 	color: var(--color-text);
 	background-color: var(--color-bg);
+	transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 main {
