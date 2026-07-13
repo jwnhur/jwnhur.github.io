@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map((project) => ({
+		params: { slug: project.id },
+		props: { project },
+	}));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+<Layout title={`${project.data.title} | Jaewon Hur`}>
+	<a href="/projects" class="back-link">&larr; Projects</a>
+	<h1>{project.data.title}</h1>
+	<p class="project-date">{project.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', timeZone: 'UTC' })}</p>
+	<div class="project-content">
+		<Content />
+	</div>
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-block;
+		margin-bottom: 1rem;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 0.9rem;
+	}
+
+	.project-date {
+		color: var(--color-text);
+		opacity: 0.7;
+		margin-top: -0.5rem;
+	}
+
+	.project-content {
+		font-family: Arial, Helvetica, sans-serif;
+	}
+</style>

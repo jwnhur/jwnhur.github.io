@@ -1,9 +1,9 @@
 :root {
 	--color-text: #32323a;
 	--color-bg: #ffffff;
-	--color-accent: #0057a8;
+	--color-accent: #0081cc;
 	--color-accent-hover: #8e018e;
-	--color-divider: #00553a;
+	--color-divider: #cccccc;
 }
 
 :root[data-theme='dark'] {
@@ -11,6 +11,7 @@
 	--color-bg: #1b1b1f;
 	--color-accent: #6cb2ff;
 	--color-accent-hover: #e388e3;
+	--color-divider: #3a3a42;
 }
 
 * {
@@ -19,7 +20,7 @@
 
 body {
 	margin: 0;
-	font-family: Georgia, 'Times New Roman', serif;
+	font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
 	line-height: 1.6;
 	color: var(--color-text);
 	background-color: var(--color-bg);
@@ -30,6 +31,20 @@ main {
 	max-width: 720px;
 	margin: 0 auto;
 	padding: 2rem 1.5rem;
+}
+
+h1 {
+	font-family: 'EB Garamond', Georgia, sans-serif;
+	color: #000000;
+}
+
+p {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000000;
+}
+
+:root[data-theme='dark'] p {
+	color: var(--color-text);
 }
 
 a {

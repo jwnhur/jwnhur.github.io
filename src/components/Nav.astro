@@ -2,16 +2,26 @@
 const navLinks = [
 	{ href: '/', label: 'About' },
 	{ href: '/blog', label: 'Blog' },
+	{ href: '/coursework', label: 'Coursework' },
 	{ href: '/projects', label: 'Projects' },
 	{ href: '/research', label: 'Research' },
-	{ href: '/academics', label: 'Academics' },
 ];
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 <header>
 	<nav>
 		<ul class="nav-links">
 			{navLinks.map((link) => (
-				<li><a href={link.href}>{link.label}</a></li>
+				<li>
+					<a
+						href={link.href}
+						class:list={{ active: currentPath === link.href }}
+						aria-current={currentPath === link.href ? 'page' : undefined}
+					>
+						{link.label}
+					</a>
+				</li>
 			))}
 			<li><a href="/cv.pdf" target="_blank" rel="noopener">CV</a></li>
 		</ul>
@@ -46,13 +56,14 @@ const navLinks = [
 
 <style>
 	header {
-		background-color: var(--color-divider);
+		background-color: var(--color-bg);
+		border-bottom: 1px solid var(--color-divider);
 	}
 
 	nav {
 		max-width: 720px;
 		margin: 0 auto;
-		padding: 1.5rem 1.5rem;
+		padding: 0.75rem 1.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
@@ -71,12 +82,16 @@ const navLinks = [
 	}
 
 	.nav-links a {
-		color: #ffffff;
+		color: var(--color-text);
 		font-weight: 600;
 	}
 
 	.nav-links a:hover {
-		color: #b7e4c7;
+		color: var(--color-accent);
+	}
+
+	.nav-links a.active {
+		color: var(--color-accent);
 	}
 
 	.nav-actions {
@@ -94,13 +109,13 @@ const navLinks = [
 		padding: 0;
 		border: none;
 		background: none;
-		color: #ffffff;
+		color: var(--color-text);
 		cursor: pointer;
 		border-radius: 0.375rem;
 	}
 
 	.icon-button:hover {
-		color: #b7e4c7;
+		color: var(--color-accent);
 	}
 
 	.icon-moon {

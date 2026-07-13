@@ -4,20 +4,55 @@ import { Image } from 'astro:assets';
 import profilePhoto from '../images/profile.jpg';
 ---
 <Layout title="Jaewon Hur">
-	<Image src={profilePhoto} alt="Jaewon Hur" width={280} height={350} densities={[1, 2, 3]} class="profile-photo" />
-	<h1>Jaewon Hur</h1>
-	<p>
-		I am a new college grad from Univeristy of California, Berkeley majoring Electrical Engineering & Computer Science (EECS).
-		I'm interested in building hardware, VLSI design, and computer architecture.
-	</p>
+	<div class="hero">
+		<div class="hero-text">
+			<h1>Jaewon Hur</h1>
+			<p>
+				Hi :&#41; I'm Jaewon, a new college grad from Univeristy of California, Berkeley with a Bachelor's degree in Electrical Engineering & Computer Science (EECS).
+				I'm interested in building hardware, VLSI design, and computer architecture.
+			</p>
+			<p>
+				During my undergrad, I've done research in spatial architecture and tensor algebra abstractions at <a href="https://slice.eecs.berkeley.edu">SLICE Lab</a> under Professor <a href="https://www2.eecs.berkeley.edu/Faculty/Homepages/cwfletcher.html">Chris Fletcher</a>.
+				I'm currently working at the lab continuing my research in building a custom flexible spatial architecture for ML applications targeting FlashAttention and CNNs.
+				Before the joining the lab, I participated in the 16nm SoC Tapeout project sponsored by Intel and Apple, working on designing and developing a DMA engine for DSP workloads.
+			</p>
+		</div>
+		<Image src={profilePhoto} alt="Jaewon Hur" width={280} height={350} densities={[1, 2, 3]} class="profile-photo" />
+	</div>
 </Layout>
 
 <style>
+	:global(main) {
+		max-width: 880px;
+	}
+
+	.hero {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.hero-text {
+		flex: 1;
+	}
+
+	.hero-text h1 {
+		margin-top: 0;
+	}
+
 	.profile-photo {
 		display: block;
+		flex-shrink: 0;
 		width: 280px;
 		height: 350px;
 		object-fit: cover;
 		padding: 4px;
+	}
+
+	@media (max-width: 640px) {
+		.hero {
+			flex-direction: column-reverse;
+		}
 	}
 </style>
